@@ -81,14 +81,12 @@ done
 }
 
 # Modify with VIM editor 
-function editList() 
-{ 
+function editList() { 
  vim ./studentList.txt
 } 
  
 # Screen Help Function  
-function showInfo() 
-{ 
+function showInfo() { 
  clear 
  echo "This is the project of Course SKR3307 Shell Programming
 Group members are:
@@ -99,15 +97,13 @@ Group members are:
 } 
  
 # Exit
-function exitProgram() 
-{ 
+function exitProgram() { 
  clear 
  exit 
 }
 
 # insertStudent: add new student info to the list
-function insertStudent()
-{
+function insertStudent(){
  clear
  echo -e "${BLUE}Enter NAME and METRIC number.${NC}"
  echo -e "\c"
@@ -117,10 +113,15 @@ function insertStudent()
  fi
 
  read NEW
- echo "$NEW" >> ./studentList.txt
+ 
+ if [ "$NEW" != "" ]; then
+  echo "$NEW" >> ./studentList.txt
 
- sort -o ./studentList.txt ./studentList.txt
- echo -e "${GREEN}Successful${NC}"
+  sort -o ./studentList.txt ./studentList.txt
+  echo -e "${GREEN}Successful${NC}"
+ else 
+  echo -e "${RED}Invalid Input${NC}"
+ fi
  sleep 2
 }
 
@@ -131,18 +132,23 @@ function deleteStudent() {
  read NAME 
  
  if [ ! -f ./studentList.txt ]; then 
- echo -e "${YELLOW}List is empty, Please add it first. ${NC}" 
+  echo -e "${YELLOW}List is empty, Please add it first. ${NC}" 
  else 
-  cp studentList.txt studentList.bak 
- 
-  grep "$NAME" ./studentList.bak > /dev/null 
-  if [ $? != 0 ]; then 
-  echo -e "${RED}This person not exist.${NC}" 
-  else 
- grep -v "$NAME" ./studentList.bak > studentList.txt 
- echo -e "${GREEN}Already DELETE it successfully${NC}" 
-  fi 
-  rm -f studentList.bak 
+  if [ "$NAME" != "" ]; then
+   cp studentList.txt studentList.bak 
+
+   grep "$NAME" ./studentList.bak > /dev/null
+   # /dev/null is the black hole, it will lose all the data inputted 
+   if [ $? != 0 ]; then 
+    echo -e "${RED}This person not exist.${NC}" 
+   else 
+    grep -v "$NAME" ./studentList.bak > studentList.txt 
+    echo -e "${GREEN}Already DELETE it successfully${NC}" 
+   fi 
+   rm -f studentList.bak 
+  else
+   echo -e "${RED}Invalid Input${NC}"
+  fi
  fi 
  sleep 1 
 }
@@ -163,7 +169,7 @@ function findStudent()
  clear
  echo -e "${BLUE}Please Enter NAME >>> ${NC}"
  read STUDENT
- # If there is no student
+ # If there is no studentList file
  if [ ! -f ./studentList.txt ]; then
   echo -e "${RED}List is empty, Please add it first! ${NC}"
   sleep 2
@@ -172,24 +178,21 @@ function findStudent()
  fi
  # When no name is entered.
  if [ -z "$STUDENT" ]; then
+ # -z means when $STUDENT.length = 0, it returns true
   echo -e "${RED}You didn't enter a name!"
-  echo -e "${BLUE}Please Enter NAME >>> ${NC}"
+  echo -e "${RED}Invalid Input${NC}"
+
+ else
+  grep "$STUDENT" ./studentList.txt > ./temp
+  GET=`grep "$STUDENT" ./studentList.txt`
+  if [ -n "$GET" ]; then
+   echo -e "${BLUE}\n\nThe information is: \n${NC}"
+   awk '{print NR " - " $0}' ./temp
+  else
+   echo -e "${RED}Student${YELLOW} ${STUDENT} ${RED}was not found ${NC}"
+  fi
+  rm -f ./temp
  fi
- echo -e "${BLUE}\n\nThe information is: \n${NC}"
-
- grep "$STUDENT" ./studentList.txt > ./temp
- awk '{print NR " - " $0}' ./temp
- rm -f ./temp
-
- case "$?" in
-  1 ) echo -e "${RED}No this student.${NC}"
-   ;;
-  2 ) echo -e "${RED}You didn't enter any student.${NC}"
-   sleep 2
-   findStudent
-   ;;
- esac
-
  echo -e "\n\n\n"
  read -n 1 -s -r -p "Press any key to continue"
  clear
