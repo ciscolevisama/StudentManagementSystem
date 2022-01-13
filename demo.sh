@@ -9,10 +9,20 @@
 
 # ----------------------------------------------PROGRAMMING SECTION------------------------------------------------------
 
+# Color variable: additional attributes
+
+NC='\033[0m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+
+# /////
+
 # title_printing: print the title of the project
 
 function bigTitle(){
-echo "
+echo -e "${GREEN}
    ______          __         __                    
   / __/ /___ _____/ /__ ___  / /_                   
  _\ \/ __/ // / _  / -_) _ \/ __/                   
@@ -44,7 +54,7 @@ do
  echo "0: EXIT PROGRAM" 
  echo "" 
   
- echo -e -n " Please Enter Your Choice: " 
+ echo -e -n "Please Enter Your Choice: ${NC}" 
  read choice 
  
  case $choice in 
@@ -62,7 +72,7 @@ do
    ;; 
   0 ) exitProgram; clear
    ;; 
-  * ) echo "Invalid Choice !" 
+  * ) echo -e "${RED}Invalid Choice !${NC}" 
    sleep 2 
    clear 
    ;; 
@@ -99,7 +109,7 @@ function exitProgram()
 function insertStudent()
 {
  clear
- echo "Enter NAME and METRIC number."
+ echo -e "${BLUE}Enter NAME and METRIC number.${NC}"
  echo -e "\c"
 
  if [ ! -f ./studentList.txt ]; then
@@ -110,27 +120,27 @@ function insertStudent()
  echo "$NEW" >> ./studentList.txt
 
  sort -o ./studentList.txt ./studentList.txt
- echo "Successful"
+ echo -e "${GREEN}Successful${NC}"
  sleep 2
 }
 
 # Delete a person in student list
 function deleteStudent() { 
  clear 
- echo -e "Please input the NAME >>> " 
+ echo -e "${BLUE}Please input the NAME >>> ${NC}" 
  read NAME 
  
  if [ ! -f ./studentList.txt ]; then 
- echo "List is empty, Please add it first. " 
+ echo -e "${YELLOW}List is empty, Please add it first. ${NC}" 
  else 
   cp studentList.txt studentList.bak 
  
   grep "$NAME" ./studentList.bak > /dev/null 
   if [ $? != 0 ]; then 
-  echo: "This person not exist." 
+  echo -e "${RED}This person not exist.${NC}" 
   else 
  grep -v "$NAME" ./studentList.bak > studentList.txt 
- echo "Already DELETE it successfully" 
+ echo -e "${GREEN}Already DELETE it successfully${NC}" 
   fi 
   rm -f studentList.bak 
  fi 
@@ -140,7 +150,7 @@ function deleteStudent() {
 # Display the student list
 function showList() {
   clear
-  echo -e "\n\nThe information is: $NAME \n"
+  echo -e "${BLUE}\n\nThe information is: $NAME \n${NC}"
   awk '{print NR " - " $0}' ./studentList.txt
   echo -e "\n\n\n"
   read -n 1 -s -r -p "Press any key to continue"
@@ -151,30 +161,30 @@ function showList() {
 function findStudent()
 {
  clear
- echo -e "Please Enter NAME >>> "
+ echo -e "${BLUE}Please Enter NAME >>> ${NC}"
  read STUDENT
  # If there is no student
  if [ ! -f ./studentList.txt ]; then
-  echo "List is empty, Please add it first! "
+  echo -e "${RED}List is empty, Please add it first! ${NC}"
   sleep 2
   clear
   return
  fi
  # When no name is entered.
  if [ -z "$STUDENT" ]; then
-  echo "You didn't enter a name!"
-  echo -e "Please Enter NAME >>> "
+  echo -e "${RED}You didn't enter a name!"
+  echo -e "${BLUE}Please Enter NAME >>> ${NC}"
  fi
- echo -e "\n\nThe information is: \n"
+ echo -e "${BLUE}\n\nThe information is: \n${NC}"
 
  grep "$STUDENT" ./studentList.txt > ./temp
  awk '{print NR " - " $0}' ./temp
  rm -f ./temp
 
  case "$?" in
-  1 ) echo "No this student."
+  1 ) echo -e "${RED}No this student.${NC}"
    ;;
-  2 ) echo "You didn't enter any student."
+  2 ) echo -e "${RED}You didn't enter any student.${NC}"
    sleep 2
    findStudent
    ;;
