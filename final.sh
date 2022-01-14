@@ -128,6 +128,26 @@ function exitProgram() {
 
 # insertStudent: add new student info to the list
 function insertStudent(){
+clear
+ echo -e "${BLUE}Enter NAME and METRIC number.${NC}"
+ echo -e "\c"
+
+ if [ ! -f ./studentList.txt ]; then
+  touch studentList.txt
+ fi
+
+ read NEW
+ #NEW include student name and metric
+ 
+ if [ "$NEW" != "" ]; then
+  echo "$NEW" >> ./studentList.txt
+
+  sort -o ./studentList.txt ./studentList.txt
+  echo -e "${GREEN}Successful${NC}"
+ else 
+  echo -e "${RED}Invalid Input${NC}"
+ fi
+ sleep 2
  
 }
 
@@ -143,6 +163,36 @@ function showList() {
 
 # find function 
 function findStudent(){
+ clear
+ echo -e "${BLUE}Please Enter NAME >>> ${NC}"
+ read NAME
+ # If there is no studentList file
+ if [ ! -f ./studentList.txt ]; then
+  echo -e "${RED}List is empty, Please add it first! ${NC}"
+  sleep 2
+  clear
+  return
+ fi
+ # When no name is entered.
+ if [ -z "$NAME" ]; then
+ # -z means when $NAME.length = 0, it returns true
+  echo -e "${RED}You didn't enter a name!"
+  echo -e "${RED}Invalid Input${NC}"
+
+ else
+  grep "$NAME" ./studentList.txt > ./temp
+  GET=`grep "$NAME" ./studentList.txt`
+  if [ -n "$GET" ]; then
+   echo -e "${BLUE}\n\nThe information is: \n${NC}"
+   awk '{print NR " - " $0}' ./temp
+  else
+   echo -e "${RED}Student${YELLOW} ${NAME} ${RED}was not found ${NC}"
+  fi
+  rm -f ./temp
+ fi
+ echo -e "\n\n\n"
+ read -n 1 -s -r -p "Press any key to continue"
+ clear
  
 }
 
