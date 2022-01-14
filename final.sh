@@ -158,7 +158,18 @@ function deleteStudent() {
  
 # Display the student list
 function showList() {
-  
+clear
+  if [ ! -f ./studentList.txt ]; then
+   echo -e "${RED}List is empty, Please add it first. ${NC}"
+   sleep 2
+   clear
+   return 0
+  fi
+  echo -e "${BLUE}\n\nThe information is: \n${NC}"
+  awk '{print NR " - " $0}' ./studentList.txt
+  echo -e "\n\n\n"
+  read -n 1 -s -r -p "Press any key to continue"
+  clear
 }
 
 # find function 
