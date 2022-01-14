@@ -128,7 +128,7 @@ function exitProgram() {
 
 # insertStudent: add new student info to the list
 function insertStudent(){
-clear
+ clear
  echo -e "${BLUE}Enter NAME and METRIC number.${NC}"
  echo -e "\c"
 
@@ -148,12 +148,34 @@ clear
   echo -e "${RED}Invalid Input${NC}"
  fi
  sleep 2
- 
 }
 
 # Delete a person in student list
 function deleteStudent() { 
+ clear 
+ echo -e "${BLUE}Please input the NAME >>> ${NC}" 
+ read NAME 
  
+ if [ ! -f ./studentList.txt ]; then 
+  echo -e "${YELLOW}List is empty, Please add it first. ${NC}" 
+ else 
+  if [ "$NAME" != "" ]; then
+   cp studentList.txt studentList.bak 
+
+   grep "$NAME" ./studentList.bak > /dev/null
+   # /dev/null is the black hole, it will lose all the data inputted 
+   if [ $? != 0 ]; then 
+    echo -e "${RED}This person not exist.${NC}" 
+   else 
+    grep -v "$NAME" ./studentList.bak > studentList.txt 
+    echo -e "${GREEN}Already DELETE it successfully${NC}" 
+   fi 
+   rm -f studentList.bak 
+  else
+   echo -e "${RED}Invalid Input${NC}"
+  fi
+ fi 
+ sleep 1 
 }
  
 # Display the student list
