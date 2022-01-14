@@ -128,6 +128,20 @@ function exitProgram() {
 
 # insertStudent: add new student info to the list
 function insertStudent(){
+clear
+ echo "Enter name and mark."
+ echo -e "\c"
+
+ if [ ! -f ./studentlist ]; then
+  touch studentlist
+ fi
+
+ read NWE
+ echo "$NEW" >> ./studentlist
+
+ sort -o ./studntlist ./studentlist
+ echo "Successful"
+ sleep 2
  
 }
 
@@ -143,6 +157,34 @@ function showList() {
 
 # find function 
 function findStudent(){
+clear
+ echo -e "Please Enter Name >>>\c"
+ read STUDENT
+# If there is no student
+ if [ ! -f ./studentList.txt ]; then
+  echo "You mush enter marks !"
+  sleep 2
+  clear
+  return
+ fi
+ # When no name is entered.
+ if [ -z "$STUDENT" ]; then
+  echo "You didn't enter a name!"
+  echo -e "Please Enter Name >>>\c"
+ fi
+ echo "The information is: $NAME"
+
+
+ grep "$STUDENT" ./studentList.txt 2> /dev/null
+
+ case "$?" in
+  1 ) echo "No this student."
+   ;;
+ 2 ) echo "You didn't enter any student."
+   sleep 2
+   find # Continue querying 
+   ;;
+ esac
  
 }
 
