@@ -113,6 +113,7 @@ function insertStudent(){
  fi
 
  read NEW
+ #NEW include student name and metric
  
  if [ "$NEW" != "" ]; then
   echo "$NEW" >> ./studentList.txt
@@ -168,7 +169,7 @@ function findStudent()
 {
  clear
  echo -e "${BLUE}Please Enter NAME >>> ${NC}"
- read STUDENT
+ read NAME
  # If there is no studentList file
  if [ ! -f ./studentList.txt ]; then
   echo -e "${RED}List is empty, Please add it first! ${NC}"
@@ -177,19 +178,19 @@ function findStudent()
   return
  fi
  # When no name is entered.
- if [ -z "$STUDENT" ]; then
- # -z means when $STUDENT.length = 0, it returns true
+ if [ -z "$NAME" ]; then
+ # -z means when $NAME.length = 0, it returns true
   echo -e "${RED}You didn't enter a name!"
   echo -e "${RED}Invalid Input${NC}"
 
  else
-  grep "$STUDENT" ./studentList.txt > ./temp
-  GET=`grep "$STUDENT" ./studentList.txt`
+  grep "$NAME" ./studentList.txt > ./temp
+  GET=`grep "$NAME" ./studentList.txt`
   if [ -n "$GET" ]; then
    echo -e "${BLUE}\n\nThe information is: \n${NC}"
    awk '{print NR " - " $0}' ./temp
   else
-   echo -e "${RED}Student${YELLOW} ${STUDENT} ${RED}was not found ${NC}"
+   echo -e "${RED}Student${YELLOW} ${NAME} ${RED}was not found ${NC}"
   fi
   rm -f ./temp
  fi
